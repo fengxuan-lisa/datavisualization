@@ -32,6 +32,10 @@ neighbourhoods <- data %>%
   pull(neighbourhood_cleansed)
 
 
+groups<- df %>%
+  distinct(neighbourhood_group_cleansed) %>%
+  pull(neighbourhood_group_cleansed)
+
 ui <- dashboardPage(
   dashboardHeader(title = "Find Your Airbnb in LA"),
   dashboardSidebar(
@@ -166,21 +170,36 @@ ui <- dashboardPage(
                   plotOutput("plot3",height=500)
                 ),
                 box(
-                  title = "The price in two different neibourhourds", 
+                  title = "The price in two different neighbourhourds", 
                   status = "primary", 
                   width = 12,
                   height = 700,
                   solidHeader = TRUE,
                   collapsible = TRUE,
                   fluidRow(
-                    column( width = 6,
-                            selectInput(inputId = "neighbourhood3a",label = "Choose the neighbourhood",
-                                        choices = neighbourhoods),  
-                    ),
-                    column( width = 6,
-                            selectInput(inputId = "neighbourhood3b",label = "Choose the neighbourhood",
-                                        choices = neighbourhoods),   
-                    ),
+
+                              column( width=3,
+                                      selectInput(inputId = "group1",label = "Choose the group",
+                                                  choices = groups)   
+                              ),
+                              column( width=3,
+                                      selectInput(inputId = "neighbourhood3a",label = "Choose the neighbourhood",
+                                                  choices = "")                     
+                              ),
+                           
+  
+                   
+                              column( width=3,
+                                      selectInput(inputId = "group2",label = "Choose the group",
+                                                  choices = groups)   
+                              ),
+                              column( width=3,
+                                      selectInput(inputId = "neighbourhood3b",label = "Choose the neighbourhood",
+                                                  choices = "")                  
+                              ),
+                            
+ 
+                    
                     plotOutput("plot3a",height=500)
                   )
 
@@ -263,9 +282,23 @@ observe({
                     inputId = "room_type",
                    choices = roomType)
  
-   
+ neighbourhood3a <- df %>%
+   filter(neighbourhood_group_cleansed == input$group1) %>%
+   distinct(neighbourhood_cleansed) %>%
+   pull (neighbourhood_cleansed)
  
+ updateSelectInput(session = session,
+                   inputId = "neighbourhood3a",
+                   choices = neighbourhood3a) 
  
+ neighbourhood3b <- df %>%
+   filter(neighbourhood_group_cleansed == input$group2) %>%
+   distinct(neighbourhood_cleansed) %>%
+   pull (neighbourhood_cleansed)
+ 
+ updateSelectInput(session = session,
+                   inputId = "neighbourhood3b",
+                   choices = neighbourhood3b) 
 }
   
 )
@@ -468,7 +501,7 @@ observe({
       caxislabels = seq(1,5,1),
       cglwd = 0.6,
       vlcex = 0.7,
-      title = "Average score"
+      title = paste("Average score in",input$neighbourhood1)
     )
   })
   
@@ -488,12 +521,12 @@ observe({
     )
     
     paste(
-      "rating:",ascore$rating[3],
-      "accuracy:",ascore$accuracy[3],
-      "cleanliness:",ascore$cleanliness[3],
-      "checkin:",ascore$checkin[3],
-      "location:",ascore$location[3],
-      "value:",ascore$value[3]
+      "Rating:",ascore$rating[3],
+      "Accuracy:",ascore$accuracy[3],
+      "Cleanliness:",ascore$cleanliness[3],
+      "Checkin:",ascore$checkin[3],
+      "Location:",ascore$location[3],
+      "Value:",ascore$value[3]
     )
     
   })
@@ -526,7 +559,7 @@ observe({
       caxislabels = seq(1,5,1),
       cglwd = 0.6,
       vlcex = 0.7,
-      title = "Average score"
+      title =paste("Average score in",input$neighbourhood1a)
     )
   })
   output$text2<-renderText({
@@ -545,12 +578,12 @@ observe({
     )
 
     paste(
-      "rating:", ascore$rating[3],
-      "accuracy:",ascore$accuracy[3],
-      "cleanliness:",ascore$cleanliness[3],
-      "checkin:",ascore$checkin[3],
-      "location:",ascore$location[3],
-      "value:",ascore$value[3]
+      "Rating:", ascore$rating[3],
+      "Accuracy:",ascore$accuracy[3],
+      "Cleanliness:",ascore$cleanliness[3],
+      "Checkin:",ascore$checkin[3],
+      "Location:",ascore$location[3],
+      "Value:",ascore$value[3]
     )
 
     
@@ -565,7 +598,9 @@ observe({
                      aes(x=neighbourhood_group_cleansed, y = price),
                    color="lightblue"
       )+
+      
       theme(
+        
         panel.grid.major = element_line(colour = "light grey",size=0.25), 
         panel.grid.minor = element_line(colour = "light grey",size=0.25),
         panel.background = element_rect(fill=NA),
@@ -584,9 +619,10 @@ observe({
       geom_boxplot(mapping =
                      aes(x=neighbourhood_cleansed, y = price,
                          color=neighbourhood_cleansed)
-                 
+                   
                    
       )+
+      
       theme(
         panel.grid.major = element_line(colour = "light grey",size=0.25), 
         panel.grid.minor = element_line(colour = "light grey",size=0.25),
