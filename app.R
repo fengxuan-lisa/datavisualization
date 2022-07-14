@@ -1,5 +1,5 @@
 # shiny URL: https://datavisualization100.shinyapps.io/project_airbnbLA/
-# github URL:
+# github URL:https://github.com/fengxuan-lisa/datavisualization.git
 #install.packages(syuzhet)
 #install.packages("fmsb")
 #install.packages("pheatmap")
