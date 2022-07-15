@@ -22,8 +22,8 @@ if(FALSE){
   lareview<- fread("http://data.insideairbnb.com/united-states/ca/los-angeles/2022-06-06/data/reviews.csv.gz")
   write.csv(lareview,file = "Lareviews.csv")
   data<- read_csv("Lalistings.csv")
-  #data
-  #sum(is.na(data))
+  data
+  sum(is.na(data))
   
   review<- read_csv("Lareviews.csv")
   
@@ -36,8 +36,10 @@ if(FALSE){
   write.csv(data,file = "Lalistings_afterwashing.csv")
   neibourhoodreview<-left_join(review,data[,c(1,2)],by=c("listing_id"="id"))
   write.csv(neibourhoodreview,file = "Laneibourhoodreviews.csv")
-  
+  datax<-read_csv("Lalistings_afterwashing.csv")
+  sum(is.na(datax))
   data<- read_csv("desktop/datavisualization/project/Lalistings_afterwashing.csv")
+  
   roomType <- data %>%
     filter(neighbourhood_cleansed == "Arcadia") %>%
     distinct(room_type) %>%

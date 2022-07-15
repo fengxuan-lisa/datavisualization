@@ -16,6 +16,7 @@ library(fmsb)
 library(pheatmap)
 library(ggplot2)
 library(SnowballC)
+library(png)
 # processing the data
 data<- read_csv("Lalistings_afterwashing.csv")
 data1<- read.csv("Lalistings_afterwashing.csv",header = TRUE,row.names = 1)
@@ -53,48 +54,96 @@ ui <- dashboardPage(
       tabItem(tabName = "page1",
               fluidRow(
                 box(
-                  title = "About airbnb & LA", 
+                  title = "About Airbnb & LA", 
                   status = "primary", 
                   width = 12,
                   solidHeader = TRUE,
                   collapsible = TRUE,
-                  "• Project title
-                  • Complete and clear description of the methods and analyses
-                  performed
-                  • Visualizations and dashboards
+                  HTML('<iframe width="100%" height="500" src="https://www.youtube.com/embed/cSjm76GW9fU" align="center" frameborder="0" allowfullscreen></iframe>'),
+                 
+                  tags$h3(" • About Airbnb:"),
+                  tags$p("Airbnb, is an American company that operates an online marketplace for lodging, 
+                         primarily homestays for vacation rentals, and tourism activities. 
+                         Based in San Francisco, California, the platform is accessible via website and mobile app. 
+                         Airbnb does not own any of the listed properties; instead, it profits by receiving commission from each booking. 
+                         The company was founded in 2008 by Brian Chesky, Nathan Blecharczyk, and Joe Gebbia. 
+                         Airbnb is a shortened version of its original name, AirBedandBreakfast.com."),
+                  tags$h3(" • About LA:"),
+                  tags$p("Los Angeles often referred to by its initials L.A., is a major city in the U.S. state of California. 
+                         With a 2020 population of 3,898,747, it is the largest city in the state, as well as the second-largest city in the United States following New York City. 
+                         Los Angeles is known for its Mediterranean climate, ethnic and cultural diversity, Hollywood film industry, and sprawling metropolitan area."),
+                  tags$p('
                   
-                  "
+                  Los Angeles is often billed as the "Creative Capital of the World" because one in every six of its residents works in a creative industry 
+                  and there are more artists, writers, filmmakers, actors, dancers and musicians living and working in Los Angeles than any other city at any other time in history.
+                         '
+                         
+                         
+                        )
                 ),
                 box(
-                  title = "project", 
+                  title = "Project", 
                   status = "primary",
                   width = 12,
                   solidHeader = TRUE,
                   collapsible = TRUE,
 
-                  "• Project description
-                   • Initial sketches
-                   • Research questions that the application is trying to address
-                   • Results and conclusion"
+                  tags$h3("• Project description"), 
+                  tags$p("
+                  Losts of people would like to travel in Los Angeles when they are on holiday.
+                  In this project, the users can find out the relationship between the room price and some factors,
+                         such like the neibourhoud,the overveiw scores in several aspects. 
+                         They can also make comparision between two neibourhoods by the prices and scores.
+                         finally they can use the filter to find and select the rooms reaching their requirements"),
+                  tags$h3 ("• Initial sketches"),
+                  tags$a("click to see the doc about draft plan",href="https://docs.google.com/document/d/1SGTbahMm3s1P_kxcKb2b90vPe5wOMVCtNqiBYqzuFUM/edit?usp=sharing",target="_blank"),
+                  tags$h3 ("• Research questions that the application is trying to address"),
+                  tags$p("find out the relationship between the room price and some factors"),
+                  tags$p(" make comparision between two neibourhoods"),
+                  tags$p("use the filter to find and select the rooms reaching their requirements"),
+                  tags$h3 ("• Methods"),
+                  tags$ol("map->show the general distribution or the location of the Airbnb user choose"),
+                  tags$ol("wordcloud->show the reviews about the neighbouhood choosed"),
+                  tags$ol("radar chart-> show the scores about the neighbourhood"),
+                  tags$ol("boxline chart->show the relationship between price and neighbourhood"),
+                  tags$ol("heatmap-> show the relationship between some features"),
+                  tags$ol("filter -> be used to select"),
+                  tags$ol("datatable -> show the whole dataset the project uses"),
+                  tags$h3 ("• Results and conclusion"),
+                  tags$p("the aveage score and reviews of neibourhoods here are good. 
+                         As for the price of room is highly influenced by which factors, still need further research")
                 ),
+                
                 box(
-                  title = "data", 
+                  title = "Data", 
                   status = "primary", 
                   width = 12,
                   solidHeader = TRUE,
                   collapsible = TRUE,
+                  
+                  tags$h3(" • Data Resources:"),
+                  tags$a("• Airbnb officilal Datasets",href="http://insideairbnb.com/explore",target="_blank"),tags$br(),
+                  tags$a("• To download raw data",href="http://data.insideairbnb.com/united-states/ca/los-angeles/2022-06-06/data/listings.csv.gz",target="_blank"),
+                  tags$h3(" • Data Description:"),
+                  tags$li("Raw data:42041(items)*75(attributes),including 288075 N/A"),
+                  tags$li("Data after cleansing-data:32112(items)*18(attributes),no N/A")
 
-                  " • Description of datasets and a few rows of datasets if they can be
-                  made public"
+
                 ),
                 box(
-                  title = "team", 
+                  title = "Team", 
                   status = "primary", 
                   width = 12,
                   solidHeader = TRUE,
                   collapsible = TRUE,
+                  tags$div(
+                    
+                    tags$li("  Name: XUAN FENG"),
+                    tags$li(" Course:BU.520.650.51.SU22 Data Visualization"),
+                    tags$li("  Program: MSIS")
+                  )
 
-                  "name, course, program"
+
                 ),
                 box(
                   title = "References", 
@@ -103,9 +152,11 @@ ui <- dashboardPage(
                   solidHeader = TRUE,
                   collapsible = TRUE,
                   
-                  "• References, sources, and other readings
                   
-                  https://community.rstudio.com/t/warning-message/52176"
+                  
+                  tags$a("• https://community.rstudio.com/t/warning-message/52176",href="https://community.rstudio.com/t/warning-message/52176",target="_blank"),tags$br(),
+                  tags$a("• https://en.wikipedia.org/wiki/Airbnb",href="https://en.wikipedia.org/wiki/Airbnb",target="_blank"),tags$br(),
+                  tags$a("• https://en.wikipedia.org/wiki/Los_Angeles",href="https://en.wikipedia.org/wiki/Los_Angeles",target="_blank"),tags$br()
                 )
               )
       ),
@@ -302,6 +353,8 @@ observe({
 }
   
 )
+  
+
   
   # GRAPHS
   # map for general distribution
@@ -595,8 +648,8 @@ observe({
     
     ggplot(data = df) +
       geom_boxplot(mapping =
-                     aes(x=neighbourhood_group_cleansed, y = price),
-                   color="lightblue"
+                     aes(x=neighbourhood_group_cleansed, y = price,color=neighbourhood_group_cleansed),
+                   
       )+
       
       theme(
