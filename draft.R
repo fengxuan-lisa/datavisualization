@@ -29,10 +29,10 @@ if(FALSE){
   
   review <- review[,c(2,7)]
   
-  data <- data[,c(2,17,18,29,31,32,34,35,41,51,57,62,63,64,65,66,67,68,70)]
+  data <- data[,c(2,3,6,17,18,29,31,32,34,35,41,51,57,62,63,64,65,66,67,68,70)]
   #sum(is.na(data))
   data <- na.omit(data)
-  data <-data[,-c(2,3)]
+  data <-data[,-c(4,5)]
   write.csv(data,file = "Lalistings_afterwashing.csv")
   neibourhoodreview<-left_join(review,data[,c(1,2)],by=c("listing_id"="id"))
   write.csv(neibourhoodreview,file = "Laneibourhoodreviews.csv")
