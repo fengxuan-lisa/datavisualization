@@ -136,8 +136,8 @@ ui <- dashboardPage(
                   tags$h3(" • Data Description:"),
                   tags$ol("Raw data:42041(items)*75(attributes),including 288075 N/A"),
                   tags$ol("Data after cleansing:"),
-                  tags$li("data:32112(items)*19(attributes),no N/A"),
-                  tags$li("reviews:32112(items)*2(attributes),no N/A")
+                  tags$ol("data:32112(items)*19(attributes),no N/A"),
+                  tags$ol("reviews:32112(items)*2(attributes),no N/A")
 
 
                 ),
