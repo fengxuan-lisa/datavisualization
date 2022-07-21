@@ -1,4 +1,4 @@
-# shiny URL: https://datavisualization100.shinyapps.io/project_airbnbLA/
+# shiny URL: https://datavisualization100.shinyapps.io/Project134_Airbnb_LA/
 # github URL:https://github.com/fengxuan-lisa/datavisualization.git
 #install.packages(syuzhet)
 #install.packages("fmsb")
@@ -22,7 +22,7 @@ data<- read_csv("Lalistings_afterwashing.csv")
 data1<- read.csv("Lalistings_afterwashing.csv",header = TRUE,row.names = 1)
 data1$price<-gsub("[$,]", "",data1$price)
 data1$price<-as.numeric(data1$price) 
-data2<-data1[,-c(1,2,5,8,17)]
+data2<-data1[,-c(1,2,3,4,7,10,19)]
 reviews<- read_csv("Lalistings.csv")
 df<-reviews[,c(2,30)]
 reviews <- reviews[,c(8,29)]
@@ -96,21 +96,30 @@ ui <- dashboardPage(
                          They can also make comparision between two neibourhoods by the prices and scores.
                          finally they can use the filter to find and select the rooms reaching their requirements"),
                   tags$h3 ("• Initial sketches"),
-                  tags$a("click to see the doc about draft plan",href="https://docs.google.com/document/d/1SGTbahMm3s1P_kxcKb2b90vPe5wOMVCtNqiBYqzuFUM/edit?usp=sharing",target="_blank"),
+                  img(src="draftplan.png", width="50%",height=500),
+                  #tags$a("click to see the doc about draft plan",
+                   
+                  #      href="https://docs.google.com/document/d/1SGTbahMm3s1P_kxcKb2b90vPe5wOMVCtNqiBYqzuFUM/edit?usp=sharing",
+                   #      target="_blank"),
                   tags$h3 ("• Research questions that the application is trying to address"),
-                  tags$p("find out the relationship between the room price and some factors"),
-                  tags$p(" make comparision between two neibourhoods"),
-                  tags$p("use the filter to find and select the rooms reaching their requirements"),
+                  tags$ol("Find out the relationship between the room price and some factors"),
+                  tags$ol("Make comparision between two neibourhoods"),
+                  tags$ol("Use the filter to find and select the rooms reaching their requirements"),
                   tags$h3 ("• Methods"),
-                  tags$ol("map->show the general distribution or the location of the Airbnb user choose"),
-                  tags$ol("wordcloud->show the reviews about the neighbouhood choosed"),
-                  tags$ol("radar chart-> show the scores about the neighbourhood"),
-                  tags$ol("boxline chart->show the relationship between price and neighbourhood"),
-                  tags$ol("heatmap-> show the relationship between some features"),
-                  tags$ol("filter -> be used to select"),
-                  tags$ol("datatable -> show the whole dataset the project uses"),
+                  tags$ol("Map -> Show the general distribution or the location of the Airbnb user choose"),
+                  tags$ol("Wordcloud -> Show the reviews about the neighbouhood choosed"),
+                  tags$ol("Radar chart -> Show the scores about the neighbourhood"),
+                  tags$ol("Box chart -> Show the relationship between price and neighbourhood"),
+                  tags$ol("Heatmap -> Show the relationship between some features"),
+                  tags$ol("Filter -> Be used to select"),
+                  tags$ol("Datatable -> Show the whole dataset the project uses"),
                   tags$h3 ("• Results and conclusion"),
-                  tags$p("the aveage score and reviews of neibourhoods here are good. 
+                  tags$p("the aveage score and reviews of neibourhoods here are good more than 4.5,
+                          but some location such like East Hollywood is an exception.
+                          We also find out that the review score of rating and  value are influenced by accuracy, communication and cleanliness.
+                          The price is influenced by accommodates, location and review score of location. 
+                          We also find that the room price in LA city is not the highest.
+                          But that is the general conclusion from the charts. 
                          As for the price of room is highly influenced by which factors, still need further research")
                 ),
                 
@@ -125,8 +134,10 @@ ui <- dashboardPage(
                   tags$a("• Airbnb officilal Datasets",href="http://insideairbnb.com/explore",target="_blank"),tags$br(),
                   tags$a("• To download raw data",href="http://data.insideairbnb.com/united-states/ca/los-angeles/2022-06-06/data/listings.csv.gz",target="_blank"),
                   tags$h3(" • Data Description:"),
-                  tags$li("Raw data:42041(items)*75(attributes),including 288075 N/A"),
-                  tags$li("Data after cleansing-data:32112(items)*18(attributes),no N/A")
+                  tags$ol("Raw data:42041(items)*75(attributes),including 288075 N/A"),
+                  tags$ol("Data after cleansing:"),
+                  tags$li("data:32112(items)*19(attributes),no N/A"),
+                  tags$li("reviews:32112(items)*2(attributes),no N/A")
 
 
                 ),
@@ -136,12 +147,14 @@ ui <- dashboardPage(
                   width = 12,
                   solidHeader = TRUE,
                   collapsible = TRUE,
-                  tags$div(
+                  
+                    tags$img(src="dog.png", float="left"),
+                 
                     
                     tags$li("  Name: XUAN FENG"),
                     tags$li(" Course:BU.520.650.51.SU22 Data Visualization"),
                     tags$li("  Program: MSIS")
-                  )
+                 
 
 
                 ),
@@ -302,10 +315,28 @@ ui <- dashboardPage(
               
               ),
               fluidRow(
-                dataTableOutput("filter",width="100%")
+                box(
+                  title = "table", 
+                  status = "primary", 
+                  width = 12,
+                  
+                  solidHeader = TRUE,
+                  collapsible = TRUE,
+                  dataTableOutput("filter",width="100%")
+                )
+                
               ),
               fluidRow(
-                leafletOutput("myMap2", width="100%",height = 600)
+                box(
+                  title = "map", 
+                  status = "primary", 
+                  width = 12,
+                  
+                  solidHeader = TRUE,
+                  collapsible = TRUE,
+                  leafletOutput("myMap2", width="100%",height = 600)
+                )
+                
               )
               
               
@@ -365,7 +396,7 @@ observe({
         )%>%
         leaflet() %>% 
         addTiles() %>%
-        setView(-118.2437,34.0522, zoom=12) %>% 
+        setView(-118.2437,34.0522, zoom=10) %>% 
         addProviderTiles(providers$Stamen.Toner, group = "Toner")%>% 
         addLayersControl(baseGroups = c("Toner", "OSM"),
                          options = layersControlOptions(collapsed = FALSE),
@@ -527,116 +558,120 @@ observe({
   
   output$plot2 <- renderPlot({
 
-    scores <- data[,c(3,11:17)]
+    scores <- data[,c(4,5,13:19)]
     avscore <- scores%>%
       filter(neighbourhood_cleansed==input$neighbourhood1)
 
     ascore <-  data.frame(
-      "rating"=c(5,0,round(mean(avscore$review_scores_rating),3)),
-      "accuracy"=c(5,0,round(mean(avscore$review_scores_accuracy),3)),
-      "cleanliness"=c(5,0,round(mean(avscore$review_scores_cleanliness),3)),
-      "checkin"=c(5,0,round(mean(avscore$review_scores_checkin),3)),
-      "communication"=c(5,0,round(mean(avscore$review_scores_communication),3)),
-      "location"=c(5,0,round(mean(avscore$review_scores_location),3)),
-      "value"=c(5,0,round(mean(avscore$review_scores_value),3))
+      "Rating"=c(5,4,round(mean(avscore$review_scores_rating),3)),
+      "Accuracy"=c(5,4,round(mean(avscore$review_scores_accuracy),3)),
+      "Cleanliness"=c(5,4,round(mean(avscore$review_scores_cleanliness),3)),
+      "Checkin"=c(5,4,round(mean(avscore$review_scores_checkin),3)),
+      "Communication"=c(5,4,round(mean(avscore$review_scores_communication),3)),
+      "Location"=c(5,4,round(mean(avscore$review_scores_location),3)),
+      "Value"=c(5,4,round(mean(avscore$review_scores_value),3))
       
     )
+
     radarchart(
       ascore, 
-      axistype = 1,
-      seg=4,
+      axistype = 3,
+      seg=5,
       pcol = rgb(0.2,0.5,0.5,0.9),
       pfcol = rgb(0.2,0.5,0.5,0.5),
       plwd = 4,
       cglcol = "black",
       cglty = 4,
       axislabcol = "grey",
-      caxislabels = seq(1,5,1),
+      #caxislabels = seq(4,5,0.2),
       cglwd = 0.6,
       vlcex = 0.7,
-      title = paste("Average score in",input$neighbourhood1)
+      title =paste("Average score in",input$neighbourhood1)
     )
+    
+
   })
   
   output$text1<-renderText({
-    scores <- data[,c(3,11:17)]
-    avscore <- scores%>%
+    scores <- data[,c(4,5,13:19)]
+    avscore1 <- scores%>%
       filter(neighbourhood_cleansed==input$neighbourhood1)
-    ascore <-  data.frame(
-      "rating"=c(5,0,round(mean(avscore$review_scores_rating),3)),
-      "accuracy"=c(5,0,round(mean(avscore$review_scores_accuracy),3)),
-      "cleanliness"=c(5,0,round(mean(avscore$review_scores_cleanliness),3)),
-      "checkin"=c(5,0,round(mean(avscore$review_scores_checkin),3)),
-      "communication"=c(5,0,round(mean(avscore$review_scores_communication),3)),
-      "location"=c(5,0,round(mean(avscore$review_scores_location),3)),
-      "value"=c(5,0,round(mean(avscore$review_scores_value),3))
+    ascore1 <-  data.frame(
+      "rating"=c(round(mean(avscore1$review_scores_rating),3)),
+      "accuracy"=c(round(mean(avscore1$review_scores_accuracy),3)),
+      "cleanliness"=c(round(mean(avscore1$review_scores_cleanliness),3)),
+      "checkin"=c(round(mean(avscore1$review_scores_checkin),3)),
+      "communication"=c(round(mean(avscore1$review_scores_communication),3)),
+      "location"=c(round(mean(avscore1$review_scores_location),3)),
+      "value"=c(round(mean(avscore1$review_scores_value),3))
       
     )
     
+   
     paste(
-      "Rating:",ascore$rating[3],
-      "Accuracy:",ascore$accuracy[3],
-      "Cleanliness:",ascore$cleanliness[3],
-      "Checkin:",ascore$checkin[3],
-      "Location:",ascore$location[3],
-      "Value:",ascore$value[3]
+      "Rating:",ascore1$rating,
+      "Accuracy:",ascore1$accuracy,
+      "Cleanliness:",ascore1$cleanliness,
+      "Checkin:",ascore1$checkin,
+      "Location:",ascore1$location,
+      "Value:",ascore1$value
     )
     
   })
   
   output$plot2a <- renderPlot({
     
-    scores <- data[,c(3,11:17)]
+    scores <- data[,c(4,5,13:19)]
     avscore <- scores%>%
       filter(neighbourhood_cleansed==input$neighbourhood1a)
     ascore <-  data.frame(
-      "rating"=c(5,0,round(mean(avscore$review_scores_rating),3)),
-      "accuracy"=c(5,0,round(mean(avscore$review_scores_accuracy),3)),
-      "cleanliness"=c(5,0,round(mean(avscore$review_scores_cleanliness),3)),
-      "checkin"=c(5,0,round(mean(avscore$review_scores_checkin),3)),
-      "communication"=c(5,0,round(mean(avscore$review_scores_communication),3)),
-      "location"=c(5,0,round(mean(avscore$review_scores_location),3)),
-      "value"=c(5,0,round(mean(avscore$review_scores_value),3))
+      "Rating"=c(5,4,round(mean(avscore$review_scores_rating),3)),
+      "Accuracy"=c(5,4,round(mean(avscore$review_scores_accuracy),3)),
+      "Cleanliness"=c(5,4,round(mean(avscore$review_scores_cleanliness),3)),
+      "Checkin"=c(5,4,round(mean(avscore$review_scores_checkin),3)),
+      "Communication"=c(5,4,round(mean(avscore$review_scores_communication),3)),
+      "Location"=c(5,4,round(mean(avscore$review_scores_location),3)),
+      "Value"=c(5,4,round(mean(avscore$review_scores_value),3))
       
     )
     radarchart(
       ascore, 
-      axistype = 1,
-      seg=4,
+      axistype = 3,
+      seg=5,
       pcol = rgb(0.2,0.5,0.5,0.9),
       pfcol = rgb(0.2,0.5,0.5,0.5),
       plwd = 4,
       cglcol = "black",
       cglty = 4,
       axislabcol = "grey",
-      caxislabels = seq(1,5,1),
+      #caxislabels = seq(4,5,0.2),
       cglwd = 0.6,
       vlcex = 0.7,
       title =paste("Average score in",input$neighbourhood1a)
     )
   })
   output$text2<-renderText({
-    scores <- data[,c(3,11:17)]
-    avscore <- scores%>%
+    scores <- data[,c(4,5,13:19)]
+    avscore1 <- scores%>%
       filter(neighbourhood_cleansed==input$neighbourhood1a)
-    ascore <-  data.frame(
-      "rating"=c(5,0,round(mean(avscore$review_scores_rating),3)),
-      "accuracy"=c(5,0,round(mean(avscore$review_scores_accuracy),3)),
-      "cleanliness"=c(5,0,round(mean(avscore$review_scores_cleanliness),3)),
-      "checkin"=c(5,0,round(mean(avscore$review_scores_checkin),3)),
-      "communication"=c(5,0,round(mean(avscore$review_scores_communication),3)),
-      "location"=c(5,0,round(mean(avscore$review_scores_location),3)),
-      "value"=c(5,0,round(mean(avscore$review_scores_value),3))
+    ascore1 <-  data.frame(
+      "rating"=c(round(mean(avscore1$review_scores_rating),3)),
+      "accuracy"=c(round(mean(avscore1$review_scores_accuracy),3)),
+      "cleanliness"=c(round(mean(avscore1$review_scores_cleanliness),3)),
+      "checkin"=c(round(mean(avscore1$review_scores_checkin),3)),
+      "communication"=c(round(mean(avscore1$review_scores_communication),3)),
+      "location"=c(round(mean(avscore1$review_scores_location),3)),
+      "value"=c(round(mean(avscore1$review_scores_value),3))
       
     )
 
     paste(
-      "Rating:", ascore$rating[3],
-      "Accuracy:",ascore$accuracy[3],
-      "Cleanliness:",ascore$cleanliness[3],
-      "Checkin:",ascore$checkin[3],
-      "Location:",ascore$location[3],
-      "Value:",ascore$value[3]
+      "Rating:", ascore1$rating,
+      "Accuracy:",ascore1$accuracy,
+      "Cleanliness:",ascore1$cleanliness,
+      "Checkin:",ascore1$checkin,
+      "Location:",ascore1$location,
+      "Value:",ascore1$value
     )
 
     
@@ -762,7 +797,7 @@ observe({
    }
     
   
-    return(datatable(data_filted[,-c(1,4,5)], rownames= FALSE,options = list(scrollX = TRUE)))
+    return(datatable(data_filted[,-c(1,3,6,7)], rownames= FALSE,options = list(scrollX = TRUE)))
     
   })
   
@@ -821,11 +856,11 @@ observe({
     }
     data_filted%>%
     mutate(
-       popusText=paste("price",price,"review rating score",review_scores_rating)
+       popusText=paste("name:",name,"price:",price,"review rating score:",review_scores_rating,tags$a("clikck here to know more",href=listing_url,target="_blank"))
       )%>%
       leaflet() %>% 
       addTiles() %>%
-      setView(data$longitude[1],data$latitude[1], zoom=12) %>% 
+      setView(data$longitude[2],data$latitude[2], zoom=10) %>% 
       addProviderTiles(providers$Stamen.Toner, group = "Toner")%>% 
       addLayersControl(baseGroups = c("Toner", "OSM"),
                        options = layersControlOptions(collapsed = FALSE),
